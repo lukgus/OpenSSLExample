@@ -1,0 +1,13 @@
+.vs/*
+HashGeneration/[Rr]elease/*
+HashGeneration/[Dd]ebug/*
+OpenSSLExample/[Rr]elease/*
+OpenSSLExample/[Dd]ebug/*
+[Dd]ebug/*.pdb
+[Dd]ebug/*.ilk
+[Dd]ebug/*.exe
+[Rr]elease/*.pdb
+[Rr]elease/*.ilk
+[Rr]elease/*.iobj
+[Rr]elease/*.exe
+[Rr]elease/*ipdb
