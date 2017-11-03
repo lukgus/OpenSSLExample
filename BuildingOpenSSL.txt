@@ -1,0 +1,39 @@
+Steps for building openssl for your machine.
+November 2, 2017
+
+
+Step 1 Download and Install PERL
+latest stable source (5.26.1)
+https://www.perl.org/get.html#win32
+Install PERL
+
+
+Step 2 Download OpenSSL
+pull openssl-master from github
+https://github.com/openssl/openssl
+
+
+Step 3 Download and Install NASM
+http://www.nasm.us/pub/nasm/releasebuilds/?C=M;O=D
+2.13.01
+win32
+A) nasm-2.13.01-installer-x86.exe
+B) nasm-2.13.01-win32.zip
+
+
+Step 4 Add to PATH
+Add nmake to path
+Add perl to path
+Add nasm to path
+
+
+Step 5
+Run As Administrator the Developer Command Prompt for VS 2017
+Found: C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Visual Studio 2017\Visual Studio Tools
+cd into openssl-master
+> perl Configure VC-WIN32
+> nmake
+> nmake test
+> nmake install
+
+Everything will be created/moved to C:/Program Files (x86)/OpenSSL/

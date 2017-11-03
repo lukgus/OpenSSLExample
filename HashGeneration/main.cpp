@@ -1,5 +1,12 @@
 #include <fstream>
 #include <iostream>
+#include <string>
+#include <stdio.h>
+
+#include <openssl\conf.h>
+#include <openssl\evp.h>
+#include <openssl\err.h>
+#include <openssl\sha.h>
 
 using namespace std;
 
@@ -10,6 +17,8 @@ const int MAX_LENGTH = 10;
 
 ofstream plainTextFile;
 ofstream hashTextFile;
+
+SHA256_CTX ctx;
 
 void WritePlainTextPasswordToFile(int length)
 {
@@ -23,13 +32,10 @@ void WritePlainTextPasswordToFile(int length)
 	{
 		for (int i = 0; i < length; i++)
 		{
-			// printf("%c", letters[i]);
 			plainTextFile << letters[i];
 		}
 
-		// printf("\n");
 		plainTextFile << "\n";
-
 
 		letters[0]++;
 
@@ -43,14 +49,28 @@ void WritePlainTextPasswordToFile(int length)
 	}
 }
 
-void PlainTextToHash()
+void PrintPlainTextToHash(const char* plainText)
 {
+	unsigned char digest[SHA256_DIGEST_LENGTH];
+	SHA256_Update(&ctx, plainText, strlen(plainText));
+	SHA256_Final(digest, &ctx);
 
+	char hash[SHA256_DIGEST_LENGTH * 2 + 1];
+	for (int i = 0; i < SHA256_DIGEST_LENGTH; i++)
+	{
+		sprintf(&(hash[i * 2]), "%02x", (unsigned int)(digest[i]));
+	}
+
+	hashTextFile << hash;
 }
 
 void WriteHashPasswordToFile(int length)
 {
 	char letters[MAX_LENGTH];
+	for (int i = 1; i < MAX_LENGTH; i++)
+	{
+		letters[i] = '\0';
+	}
 	for (int i = 0; i < length; i++)
 	{
 		letters[i] = 'a';
@@ -60,12 +80,11 @@ void WriteHashPasswordToFile(int length)
 	{
 		for (int i = 0; i < length; i++)
 		{
-			printf("%c", letters[i]);
+			hashTextFile << letters[i];
 		}
-
-		printf("\n");
-		// hashTextFile << "\n";
-
+		hashTextFile << "\t";
+		PrintPlainTextToHash(&letters[0]);
+		hashTextFile << "\n";
 
 		letters[0]++;
 
@@ -105,7 +124,7 @@ void WriteHashValues()
 		return;
 	}
 
-	for (int i = 0; i <= 4; i++)
+	for (int i = 1; i <= 4; i++)
 	{
 		WriteHashPasswordToFile(i);
 	}
@@ -115,7 +134,9 @@ void WriteHashValues()
 
 int main()
 {
-	WritePlainTextValues();
+	SHA256_Init(&ctx);
+
+	WriteHashValues();
 
 	return 0;
 }
